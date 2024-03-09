@@ -1,10 +1,10 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { ValidationError, addMethod, string } from "yup";
-import { addNumericMethods } from "./numeric";
+import { ValidationError, addMethod, string, object } from "yup";
+import { register } from "./numeric";
 
 describe('numeric', () => {
   beforeAll(() => {
-    addNumericMethods(addMethod, string);
+    register(addMethod, string);
   });
 
   it('should resolve validation when given a valid value', async () => {
@@ -62,4 +62,31 @@ describe('numeric', () => {
 
     expect(result).toBe(value);
   });
+
 });
+
+describe('gt', () => {
+  beforeAll(() => {
+    register(addMethod, string);
+  });
+
+  it('should reject validation when given value equal to boundary', async () => {
+    const schema = object({
+      window: string().numeric('Invalid numeric string').gt(5.3)
+    });
+    const value = { window: '5.3' };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError('window must be greater than 5.3'));
+  });
+
+  it('should reject validation when given a smaller value', async () => {
+    const schema = object({
+      window: string().numeric('Invalid numeric string').gt(5.3)
+    });
+    const value = { window: '4' };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError('window must be greater than 5.3'));
+  });
+})
