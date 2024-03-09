@@ -1,7 +1,7 @@
 {
   "name": "yup-numeric",
   "version": "0.0.0",
-  "description": "",
+  "description": "Yup methods to validate numeric strings",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
   "types": "./lib/index.d.ts",
