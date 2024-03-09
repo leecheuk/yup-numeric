@@ -1,0 +1,41 @@
+{
+  "name": "yup-numeric",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "module": "./lib/index.mjs",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "start": "ts-node ./lib/numeric.ts",
+    "build": "rollup -c",
+    "test": "vitest",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leecheuk/yup-numeric.git"
+  },
+  "author": {
+    "name": "@leecheuk Cheuk Lee"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leecheuk/yup-numeric/issues"
+  },
+  "homepage": "https://github.com/leecheuk/yup-numeric",
+  "peerDependencies": {
+    "bignumber.js": "^9.1.2",
+    "yup": "^1.3.3"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.12.0",
+    "rollup-plugin-dts": "^6.1.0",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.6.2",
+    "vitest": "^1.3.1"
+  },
+  "dependencies": {
+    "typescript": "^5.4.2"
+  }
+}

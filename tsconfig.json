@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "lib": ["es5", "es6", "es7", "esnext", "dom"],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "target": "esnext"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts"]
+}
