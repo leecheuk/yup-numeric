@@ -2,6 +2,7 @@ src
 node_modules
 package
 *.tgz
-package.json
 rollup.config.mjs
 tsconfig.json
+.github
+.tool-versions

@@ -2,14 +2,14 @@
   "name": "yup-numeric",
   "version": "0.0.0",
   "description": "Yup methods to validate numeric strings",
-  "main": "./lib/index.js",
-  "module": "./lib/index.mjs",
-  "types": "./lib/index.d.ts",
+  "browser": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "start": "ts-node ./lib/numeric.ts",
     "build": "rollup -c",
-    "test": "vitest",
-    "prepack": "npm run build"
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
-    "rollup": "^4.12.0",
+    "rollup": "^4.12.1",
     "rollup-plugin-dts": "^6.1.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.2",

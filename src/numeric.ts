@@ -1,85 +1,52 @@
-import BigNumber from 'bignumber.js';
-import { AnyObject, ISchema, StringSchema } from 'yup';
+import { MixedSchema } from "yup";
+import { isAbsent, isEqual, isGreaterThan, isGreaterThanOrEqual, isLessThan, isLessThanOrEqual } from "./utils";
+import BigNumber from "bignumber.js";
 
-const isAbsent = (value: any): boolean => value == null;
-
-export interface StringSchemaWithNumeric {
-  numeric(message?: string): StringSchema;
-  gt(num: number, message?: string): StringSchema;
-  gte(num: number, message?: string): StringSchema;
-  lt(num: number, message?: string): StringSchema;
-  lte(num: number, message?: string): StringSchema;
-  eq(num: number, message?: string): StringSchema;
+export interface INumericSchema extends MixedSchema<string> {
+  gte: (num: number|string, message?: string) => INumericSchema;
+  lte: (num: number|string, message?: string) => INumericSchema;
+  eq: (num: number|string, message?: string) => INumericSchema;
+  gt: (num: number|string, message?: string) => INumericSchema;
+  lt: (num: number|string, message?: string) => INumericSchema;
 }
 
-declare module "yup" {
-  interface StringSchema extends StringSchemaWithNumeric {
+export class NumericSchema extends MixedSchema<string> {
+  constructor() {
+    super({
+      type: 'numeric',
+      check(value: string): value is NonNullable<string> {
+        const parsed = new BigNumber(value);
+        return typeof value === 'string' && !parsed.isNaN();
+      },
+    });
+
+    this.withMutation((schema) => {
+      schema.transform(function mutate(value) {
+        if (isAbsent(value)) return value;
+        return value.toString();
+      })
+    });
+  }
+
+  gte(num: number|string, message?: string): INumericSchema {
+    return isGreaterThanOrEqual.call(this, num, message);
+  }
+
+  lte(num: number|string, message?: string): INumericSchema {
+    return isLessThanOrEqual.call(this, num, message);
+  }
+
+  eq(num: number|string, message?: string): INumericSchema {
+    return isEqual.call(this, num, message);
+  }
+
+  gt(num: number|string, message?: string): INumericSchema {
+    return isGreaterThan.call(this, num, message);
+  }
+
+  lt(num: number|string, message?: string): INumericSchema {
+    return isLessThan.call(this, num, message);
   }
 }
 
-export const isNumeric = function(this: StringSchema, message?: any): StringSchema<string | undefined, AnyObject, undefined, ""> {
-  const defaultMessage = `\${path} must a valid number`;
-  return this.test('numeric', message ?? defaultMessage, function(value) {
-    if (isAbsent(value)) return true;
-    const result = new BigNumber(value!);
-    return !result.isNaN();
-  });
-}
-
-export const isGreaterThan = function(this: StringSchema, num: any, message?: any): StringSchema<string | undefined, AnyObject, undefined, ""> {
-  const defaultMessage = `\${path} must be greater than ${num}`;
-  return this.test('gt', message ?? defaultMessage, function(value) {
-    if (isAbsent(value)) return true;
-    const isValid = new BigNumber(value!).gt(num);
-    return isValid;
-  });
-}
-
-export const isGreaterThanOrEqual = function(this: StringSchema, num: any, message?: any): StringSchema<string | undefined, AnyObject, undefined, ""> {
-  const defaultMessage = `\${path} must be greater than or equal to ${num}`;
-  return this.test('lte', message ?? defaultMessage, function(value) {
-    if (isAbsent(value)) return true;
-    const isValid = new BigNumber(value!).gte(num);
-    return isValid;
-  });
-}
-
-
-export const isLessThan = function(this: StringSchema, num: any, message?: any): StringSchema<string | undefined, AnyObject, undefined, ""> {
-  const defaultMessage = `\${path} must be less than ${num}`;
-  return this.test('lt', message ?? defaultMessage, function(value) {
-    if (isAbsent(value)) return true;
-    const isValid = new BigNumber(value!).lt(num);
-    return isValid;
-  });
-}
-
-
-export const isLessThanOrEqual = function(this: StringSchema, num: any, message?: any): StringSchema<string | undefined, AnyObject, undefined, ""> {
-  const defaultMessage = `\${path} must be less than or equal to ${num}`;
-  return this.test('lte', message ?? defaultMessage, function(value) {
-    if (isAbsent(value)) return true;
-    const isValid = new BigNumber(value!).lte(num);
-    return isValid;
-  });
-}
-
-export const isEqual = function(this: StringSchema, num: any, message?: any): StringSchema<string | undefined, AnyObject, undefined, ""> {
-  const defaultMessage = `\${path} must be equal to ${num}`;
-  return this.test('eq', message ?? defaultMessage, function(value) {
-    if (isAbsent(value)) return true;
-    const isValid = new BigNumber(value!).eq(num);
-    return isValid;
-  });
-}
-
-type AddMethod = <T extends ISchema<any>>(schemaType: (...arg: any[]) => T, name: string, fn: (this: T, ...args: any[]) => T) => void
-
-export const register = function(addMethod: AddMethod, stringSchema: () => StringSchema): void {
-  addMethod(stringSchema, 'numeric', isNumeric);
-  addMethod(stringSchema, 'gt', isGreaterThan);
-  addMethod(stringSchema, 'gte', isGreaterThanOrEqual);
-  addMethod(stringSchema, 'lt', isLessThan);
-  addMethod(stringSchema, 'lte', isLessThanOrEqual);
-  addMethod(stringSchema, 'eq', isEqual);
-}
+export const numeric = () => new NumericSchema();

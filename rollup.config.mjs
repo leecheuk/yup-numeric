@@ -3,7 +3,7 @@ import typescript from "@rollup/plugin-typescript";
 
 export default [
   {
-    input: `src/main.ts`,
+    input: `src/index.ts`,
     plugins: [
       typescript({
         sourceMap: false,
@@ -11,39 +11,42 @@ export default [
     ],
     output: [
       {
-        file: `lib/index.js`,
+        file: `dist/index.js`,
         format: "cjs",
         globals: {
           "bignumber.js": "BigNumber",
+          yup: "yup",
         },
       },
       {
-        file: `lib/index.umd.js`,
+        file: `dist/index.umd.js`,
         name: "yupNumeric",
         format: "umd",
         sourcemap: false,
         exports: "named",
         globals: {
           "bignumber.js": "BigNumber",
+          yup: "yup",
         },
       },
       {
-        file: `lib/index.mjs`,
+        file: `dist/index.mjs`,
         format: "es",
         sourcemap: false,
         exports: "named",
         globals: {
           "bignumber.js": "BigNumber",
+          yup: "yup",
         },
       },
     ],
     external: ["bignumber.js", "yup"],
   },
   {
-    input: "src/main.ts",
+    input: "src/index.ts",
     output: [
       {
-        file: `lib/index.d.ts`,
+        file: `dist/index.d.ts`,
         format: "es",
       },
     ],
