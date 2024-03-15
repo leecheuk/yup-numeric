@@ -352,3 +352,127 @@ describe('eq', () => {
     expect(result).resolves.toEqual(value);
   });
 });
+
+describe('min', () => {
+  it('should resolves validation when given value equal to boundary', async () => {
+    const schema = object({
+      window: numeric().min(5.3)
+    });
+    const value = { window: '5.3' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+
+  it('should resolves validation when given a greater value', async () => {
+    const schema = object({
+      window: numeric().min(5.3)
+    });
+    const value = { window: '5.3000000000000001' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+
+  it('should reject validation when given a smaller value', async () => {
+    const schema = object({
+      window: numeric().min(5.3)
+    });
+    const value = { window: '5.2999999999999999999999' };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError('window must be greater than or equal to 5.3'));
+  });
+
+  it('should reject validation when given an invalid value', async () => {
+    const schema = object({
+      window: numeric().min(5.3).typeError(invalidMessage)
+    });
+    const value = { window: 'sdfdf' };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+  });
+
+  it('should reject validation when given null', async () => {
+    const schema = object({
+      window: numeric().min(5.3)
+    });
+    const value = { window: null };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
+  });
+
+  it('should resolves when given undefined', async () => {
+    const schema = object({
+      window: numeric().min(5.3)
+    });
+    const value = { window: undefined };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+});
+
+describe('max', () => {
+  it('should resolves validation when given value equal to boundary', async () => {
+    const schema = object({
+      window: numeric().max(5.3)
+    });
+    const value = { window: '5.3' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+
+  it('should rejects validation when given a greater value', async () => {
+    const schema = object({
+      window: numeric().max(5.3)
+    });
+    const value = { window: '5.3000000000000001' };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError('window must be less than or equal to 5.3'));
+  });
+
+  it('should resolves validation when given a smaller value', async () => {
+    const schema = object({
+      window: numeric().max(5.3)
+    });
+    const value = { window: '5.2999999999999999999999' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+
+  it('should reject validation when given an invalid value', async () => {
+    const schema = object({
+      window: numeric().max(5.3).typeError(invalidMessage)
+    });
+    const value = { window: 'sdfdf' };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+  });
+
+  it('should reject validation when given null', async () => {
+    const schema = object({
+      window: numeric().max(5.3)
+    });
+    const value = { window: null };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
+  });
+
+  it('should resolves when given undefined', async () => {
+    const schema = object({
+      window: numeric().max(5.3)
+    });
+    const value = { window: undefined };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+});
