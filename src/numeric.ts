@@ -8,6 +8,8 @@ export interface INumericSchema extends MixedSchema<string> {
   eq: (num: number|string, message?: string) => INumericSchema;
   gt: (num: number|string, message?: string) => INumericSchema;
   lt: (num: number|string, message?: string) => INumericSchema;
+  min: (num: number|string, message?: string) => INumericSchema;
+  max: (num: number|string, message?: string) => INumericSchema;
 }
 
 export class NumericSchema extends MixedSchema<string> {
@@ -33,6 +35,14 @@ export class NumericSchema extends MixedSchema<string> {
   }
 
   lte(num: number|string, message?: string): INumericSchema {
+    return isLessThanOrEqual.call(this, num, message);
+  }
+
+  min(num: number|string, message?: string): INumericSchema {
+    return isGreaterThanOrEqual.call(this, num, message);
+  }
+
+  max(num: number|string, message?: string): INumericSchema {
     return isLessThanOrEqual.call(this, num, message);
   }
 
