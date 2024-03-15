@@ -1,6 +1,6 @@
 {
   "name": "yup-numeric",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Yup methods to validate numeric strings",
   "private": false,
   "browser": "./dist/index.js",
