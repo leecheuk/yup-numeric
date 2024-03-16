@@ -475,4 +475,24 @@ describe('max', () => {
 
     expect(result).resolves.toEqual(value);
   });
+
+  it('should rejects when given value is greater than max but smaller than lte', async () => {
+    const schema = object({
+      window: numeric().max(5.3).lte(9)
+    });
+    const value = { window: '8' };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError('window must be less than or equal to 5.3'));
+  });
+
+  it('should rejects when given value is smaller than both max & lte', async () => {
+    const schema = object({
+      window: numeric().max(5.3).lte(9)
+    });
+    const value = { window: '4' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
 });
