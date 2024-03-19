@@ -496,3 +496,65 @@ describe('max', () => {
     expect(result).resolves.toEqual(value);
   });
 });
+
+describe('integer', () => {
+  it('should resolve validation when given an integer', async () => {
+    const schema = object({
+      window: numeric().integer()
+    });
+    const value = { window: '500390393093030330303030' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+
+  it('should resolve validation when given a negative integer', async () => {
+    const schema = object({
+      window: numeric().integer()
+    });
+    const value = { window: '-500390393093030330303030' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+
+  it('should resolve validation when given an integer with min boundary', async () => {
+    const schema = object({
+      window: numeric().integer().min(4)
+    });
+    const value = { window: '4.0' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+
+  it('should reject validation when given a non-integer', async () => {
+    const schema = object({
+      window: numeric().integer()
+    });
+    const value = { window: '5.3000000000000001' };
+    const result = schema.validate(value);
+
+    expect(result).rejects.toEqual(new ValidationError('window must be an integer'));
+  });
+
+  it('should resolve validation when given 0', async () => {
+    const schema = object({
+      window: numeric().integer()
+    });
+    const value = { window: '0' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+
+  it('should resolve validation when given 0.00', async () => {
+    const schema = object({
+      window: numeric().integer()
+    });
+    const value = { window: '0.00' };
+    const result = schema.validate(value);
+
+    expect(result).resolves.toEqual(value);
+  });
+});
