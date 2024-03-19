@@ -51,11 +51,20 @@ export function isLessThan(this: INumericSchema, num: number|string, message?: s
   });
 }
 
-export const isNumeric = function(this: INumericSchema, message?: any) {
+export const isNumeric = function(this: INumericSchema, message?: string) {
   const defaultMessage = `\${path} must a valid number`;
   return this.test('numeric', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
     const result = new BigNumber(value!);
     return !result.isNaN();
+  });
+}
+
+export const isInteger = function(this: INumericSchema, message?: string) {
+  const defaultMessage = `\${path} must be an integer`;
+  return this.test('integer', message ?? defaultMessage, function(value: string) {
+    if (isAbsent(value)) return true;
+    const isValid = new BigNumber(value!).isInteger();
+    return isValid;
   });
 }

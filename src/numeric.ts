@@ -1,5 +1,5 @@
 import { MixedSchema } from "yup";
-import { isAbsent, isEqual, isGreaterThan, isGreaterThanOrEqual, isLessThan, isLessThanOrEqual } from "./utils";
+import { isAbsent, isEqual, isGreaterThan, isGreaterThanOrEqual, isInteger, isLessThan, isLessThanOrEqual } from "./utils";
 import BigNumber from "bignumber.js";
 
 export interface INumericSchema extends MixedSchema<string> {
@@ -10,6 +10,7 @@ export interface INumericSchema extends MixedSchema<string> {
   lt: (num: number|string, message?: string) => INumericSchema;
   min: (num: number|string, message?: string) => INumericSchema;
   max: (num: number|string, message?: string) => INumericSchema;
+  integer: (message?: string) => INumericSchema;
 }
 
 export class NumericSchema extends MixedSchema<string> {
@@ -56,6 +57,10 @@ export class NumericSchema extends MixedSchema<string> {
 
   lt(num: number|string, message?: string): INumericSchema {
     return isLessThan.call(this, num, message);
+  }
+
+  integer(message?: string): INumericSchema {
+    return isInteger.call(this, message);
   }
 }
 
