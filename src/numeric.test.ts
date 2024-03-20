@@ -602,3 +602,47 @@ describe('isMoreThan', () => {
     await expect(result).resolves.toEqual(value);
   });
 });
+
+describe('isLessThan', () => {
+  it('should resolve validation when given a smaller value', async () => {
+    const schema = object({
+      window: numeric().lessThan(3)
+    });
+    const value = { window: '2.999999999999999999999999' };
+    const result = schema.validate(value);
+
+    await expect(result).resolves.toEqual(value);
+  });
+
+  it('should reject validation when given a greater value', async () => {
+    const schema = object({
+      window: numeric().lessThan(3)
+    });
+    const value = { window: '3.0000000000000001' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('window must be less than 3'));
+  });
+
+  it('should reject validation when smaller than ref', async () => {
+    const schema = object({
+      maxWindow: numeric(),
+      minWindow: numeric().lessThan(ref('maxWindow'))
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.11' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('minWindow must be less than maxWindow'));
+  });
+
+  it('should resolve validation when more than ref', async () => {
+    const schema = object({
+      maxWindow: numeric(),
+      minWindow: numeric().lessThan(ref('maxWindow'))
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.5' };
+    const result = schema.validate(value);
+
+    await expect(result).resolves.toEqual(value);
+  });
+});
