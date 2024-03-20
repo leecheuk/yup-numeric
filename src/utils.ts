@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { INumericSchema } from './numeric';
+import { Reference } from 'yup';
 
 export const isAbsent = (value: any): boolean => value == null;
 
@@ -65,6 +66,52 @@ export const isInteger = function(this: INumericSchema, message?: string) {
   return this.test('integer', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
     const isValid = new BigNumber(value!).isInteger();
+    return isValid;
+  });
+}
+
+export const isMoreThanWithRef = function(this: INumericSchema, more: number|string|Reference<number|string>, message?: string) {
+  const isPrimitive = ['string', 'number'].includes(typeof more)
+  const morePath = !isPrimitive
+   ? (more as Reference<number|string>).path
+   : more;
+
+  const defaultMessage = `\${path} must be more than ${morePath}`;
+  return this.test('moreThan', message ?? defaultMessage, function(value: string) {
+    if (isAbsent(value)) return true;
+
+    if (isPrimitive) {
+      return new BigNumber(value!).isGreaterThan(more as string|number);
+    }
+
+    const parsedMore = this.resolve(more);
+    const parsed = new BigNumber(parsedMore);
+    if (parsed.isNaN()) return false;
+    
+    const isValid = new BigNumber(value!).isGreaterThan(parsed);
+    return isValid;
+  });
+}
+
+export const isLessThanWithRef = function(this: INumericSchema, less: number|string|Reference<number|string>, message?: string) {
+  const isPrimitive = ['string', 'number'].includes(typeof less)
+  const lessPath = !isPrimitive
+   ? (less as Reference<number|string>).path
+   : less;
+
+  const defaultMessage = `\${path} must be less than ${lessPath}`;
+  return this.test('moreThan', message ?? defaultMessage, function(value: string) {
+    if (isAbsent(value)) return true;
+
+    if (isPrimitive) {
+      return new BigNumber(value!).isLessThan(less as string|number);
+    }
+
+    const parsedMore = this.resolve(less);
+    const parsed = new BigNumber(parsedMore);
+    if (parsed.isNaN()) return false;
+    
+    const isValid = new BigNumber(value!).isLessThan(parsed);
     return isValid;
   });
 }
