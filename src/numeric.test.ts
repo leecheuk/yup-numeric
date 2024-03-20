@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ValidationError, object } from "yup";
+import { ValidationError, object, ref } from "yup";
 import { numeric } from './numeric'
 
 const invalidMessage = 'Invalid numeric';
@@ -556,5 +556,49 @@ describe('integer', () => {
     const result = schema.validate(value);
 
     expect(result).resolves.toEqual(value);
+  });
+});
+
+describe('isMoreThan', () => {
+  it('should resolve validation when given a greater value', async () => {
+    const schema = object({
+      window: numeric().moreThan(3)
+    });
+    const value = { window: '4' };
+    const result = schema.validate(value);
+
+    await expect(result).resolves.toEqual(value);
+  });
+
+  it('should reject validation when given a smaller value', async () => {
+    const schema = object({
+      window: numeric().moreThan(3)
+    });
+    const value = { window: '2.9999999' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('window must be more than 3'));
+  });
+
+  it('should reject validation when smaller than ref', async () => {
+    const schema = object({
+      minWindow: numeric(),
+      maxWindow: numeric().moreThan(ref('minWindow'))
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.11' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('maxWindow must be more than minWindow'));
+  });
+
+  it('should resolve validation when more than ref', async () => {
+    const schema = object({
+      minWindow: numeric(),
+      maxWindow: numeric().moreThan(ref('minWindow'))
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.5' };
+    const result = schema.validate(value);
+
+    await expect(result).resolves.toEqual(value);
   });
 });
