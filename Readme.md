@@ -4,7 +4,7 @@ yup methods for validating numeric strings. Methods to validate whether string c
 
 ## Installation
 ```bash
-npm install yup-numeric yup bignumber.js
+npm install yup-numeric
 ```
 
 ## Usage
