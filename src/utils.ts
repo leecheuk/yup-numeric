@@ -4,6 +4,13 @@ import { Reference } from 'yup';
 
 export const isAbsent = (value: any): boolean => value == null;
 
+const isPrimitive = (value: number|string|Reference<number|string>): boolean => 
+  ['string', 'number'].includes(typeof value);
+
+const getPath = (value: number|string|Reference<number|string>): string => !isPrimitive(value)
+  ? (value as Reference<number|string>).path
+  : value;
+
 export function isGreaterThanOrEqual(this: INumericSchema, num: number|string, message?: string): INumericSchema {
   const defaultMessage = `\${path} must be greater than or equal to ${num}`;
   return this.test('gte', message ?? defaultMessage, function(value: string) {
@@ -71,16 +78,14 @@ export const isInteger = function(this: INumericSchema, message?: string) {
 }
 
 export const isMoreThanWithRef = function(this: INumericSchema, more: number|string|Reference<number|string>, message?: string) {
-  const isPrimitive = ['string', 'number'].includes(typeof more)
-  const morePath = !isPrimitive
-   ? (more as Reference<number|string>).path
-   : more;
+  const primitive = isPrimitive(more);
+  const morePath = getPath(more);
 
   const defaultMessage = `\${path} must be more than ${morePath}`;
   return this.test('moreThan', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
 
-    if (isPrimitive) {
+    if (primitive) {
       return new BigNumber(value!).isGreaterThan(more as string|number);
     }
 
@@ -94,16 +99,14 @@ export const isMoreThanWithRef = function(this: INumericSchema, more: number|str
 }
 
 export const isLessThanWithRef = function(this: INumericSchema, less: number|string|Reference<number|string>, message?: string) {
-  const isPrimitive = ['string', 'number'].includes(typeof less)
-  const lessPath = !isPrimitive
-   ? (less as Reference<number|string>).path
-   : less;
+  const primitive = isPrimitive(less);
+  const lessPath = getPath(less);
 
   const defaultMessage = `\${path} must be less than ${lessPath}`;
   return this.test('moreThan', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
 
-    if (isPrimitive) {
+    if (primitive) {
       return new BigNumber(value!).isLessThan(less as string|number);
     }
 
