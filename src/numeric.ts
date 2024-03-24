@@ -11,6 +11,8 @@ export interface INumericSchema extends MixedSchema<string> {
   min: (num: number|string, message?: string) => INumericSchema;
   max: (num: number|string, message?: string) => INumericSchema;
   integer: (message?: string) => INumericSchema;
+  moreThan: (more: number|string|Reference<number|string>, message?: string) => INumericSchema;
+  lessThan: (more: number|string|Reference<number|string>, message?: string) => INumericSchema;
 }
 
 export class NumericSchema extends MixedSchema<string> {
