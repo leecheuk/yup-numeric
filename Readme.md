@@ -19,13 +19,13 @@ const result = await schema.validate(value);
 
 ## API
 
-### `numeric().gte(num: number|string, message?: string)`
+### `numeric().gte(num: number|string|Ref, message?: string)`
 Value must be greater than or equal to `num`.
 
-### `numeric().lte(num: number|string, message?: string)`
+### `numeric().lte(num: number|string|Ref, message?: string)`
 Value must be less than or equal to `num`.
 
-### `numeric().eq(num: number|string, message?: string)`
+### `numeric().eq(num: number|string|Ref, message?: string)`
 Value must be equal to `num`.
 
 ### `numeric().gt(num: number|string, message?: string)`
@@ -34,10 +34,10 @@ Value must be greater than `num`.
 ### `numeric().lt(num: number|string, message?: string)`
 Value must be less than `num`.
 
-### `numeric().min(num: number|string, message?: string)`
+### `numeric().min(num: number|string|Ref, message?: string)`
 Set a minimum value for the numeric string value.
 
-### `numeric().max(num: number|string, message?: string)`
+### `numeric().max(num: number|string|Ref, message?: string)`
 Set a maximum value for the string value.
 
 ### `numeric().integer(message?: string)`

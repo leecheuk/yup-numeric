@@ -11,30 +11,66 @@ const getPath = (value: number|string|Reference<number|string>): string => !isPr
   ? (value as Reference<number|string>).path
   : value;
 
-export function isGreaterThanOrEqual(this: INumericSchema, num: number|string, message?: string): INumericSchema {
-  const defaultMessage = `\${path} must be greater than or equal to ${num}`;
+export function isGreaterThanOrEqual(this: INumericSchema, num: number|string|Reference<number|string>, message?: string): INumericSchema {
+  const primitive = isPrimitive(num);
+  const path = getPath(num);
+
+  const defaultMessage = `\${path} must be greater than or equal to ${path}`;
   return this.test('gte', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
-    const isValid = new BigNumber(value!).gte(num);
+
+    if (primitive) {
+      return new BigNumber(value!).gte(num as string|number);
+    }
+
+    const resolved = this.resolve(num) as string;
+    const parsed = new BigNumber(resolved);
+    if (parsed.isNaN()) return false;
+
+    const isValid = new BigNumber(value!).gte(parsed);
     return isValid;
   });
 }
 
-export function isLessThanOrEqual(this: INumericSchema, num: number|string, message?: string) {
-  const defaultMessage = `\${path} must be less than or equal to ${num}`;
+export function isLessThanOrEqual(this: INumericSchema, num: number|string|Reference<number|string>, message?: string) {
+  const primitive = isPrimitive(num);
+  const path = getPath(num);
+
+  const defaultMessage = `\${path} must be less than or equal to ${path}`;
   return this.test('lte', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
-    const isValid = new BigNumber(value!).lte(num);
+
+    if (primitive) {
+      return new BigNumber(value!).lte(num as string|number);
+    }
+
+    const resolved = this.resolve(num);
+    const parsed = new BigNumber(resolved);
+    if (parsed.isNaN()) return false;
+    
+    const isValid = new BigNumber(value!).lte(parsed);
     return isValid;
   });
 }
 
 
-export function isEqual(this: INumericSchema, num: number|string, message?: string) {
-  const defaultMessage = `\${path} must be equal to ${num}`;
+export function isEqual(this: INumericSchema, num: number|string|Reference<number|string>, message?: string) {
+  const primitive = isPrimitive(num);
+  const path = getPath(num);
+
+  const defaultMessage = `\${path} must be equal to ${path}`;
   return this.test('eq', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
-    const isValid = new BigNumber(value!).eq(num);
+
+    if (primitive) {
+      return new BigNumber(value!).eq(num as string|number);
+    }
+
+    const resolved = this.resolve(num);
+    const parsed = new BigNumber(resolved);
+    if (parsed.isNaN()) return false;
+
+    const isValid = new BigNumber(value!).eq(parsed);
     return isValid;
   });
 }
@@ -89,8 +125,8 @@ export const isMoreThanWithRef = function(this: INumericSchema, more: number|str
       return new BigNumber(value!).isGreaterThan(more as string|number);
     }
 
-    const parsedMore = this.resolve(more);
-    const parsed = new BigNumber(parsedMore);
+    const resolved = this.resolve(more);
+    const parsed = new BigNumber(resolved);
     if (parsed.isNaN()) return false;
     
     const isValid = new BigNumber(value!).isGreaterThan(parsed);
@@ -110,8 +146,8 @@ export const isLessThanWithRef = function(this: INumericSchema, less: number|str
       return new BigNumber(value!).isLessThan(less as string|number);
     }
 
-    const parsedMore = this.resolve(less);
-    const parsed = new BigNumber(parsedMore);
+    const resolved = this.resolve(less);
+    const parsed = new BigNumber(resolved);
     if (parsed.isNaN()) return false;
     
     const isValid = new BigNumber(value!).isLessThan(parsed);

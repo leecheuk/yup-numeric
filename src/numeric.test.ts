@@ -227,6 +227,50 @@ describe('gte', () => {
 
     expect(result).resolves.toEqual(value);
   });
+
+  it('should reject validation when less than ref', async () => {
+    const schema = object({
+      minWindow: numeric(),
+      maxWindow: numeric().gte(ref('minWindow'))
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.11' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('maxWindow must be greater than or equal to minWindow'));
+  });
+
+  it('should reject validation when ref is invalid number', async () => {
+    const schema = object({
+      minWindow: numeric(),
+      maxWindow: numeric().gte(ref('minWindow'))
+    });
+    const value = { minWindow: 'abc', maxWindow: '3.11' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('maxWindow must be greater than or equal to minWindow'));
+  });
+
+  it('should resolves validation when greater than ref', async () => {
+    const schema = object({
+      minWindow: numeric(),
+      maxWindow: numeric().gte(ref('minWindow'))
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.2000000001' };
+    const result = schema.validate(value);
+
+    await expect(result).resolves.toEqual(value);
+  });
+
+  it('should resolves validation when equal to ref', async () => {
+    const schema = object({
+      minWindow: numeric(),
+      maxWindow: numeric().gte(ref('minWindow'))
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.2' };
+    const result = schema.validate(value);
+
+    await expect(result).resolves.toEqual(value);
+  });
 });
 
 describe('lte', () => {
@@ -250,7 +294,7 @@ describe('lte', () => {
     expect(result).rejects.toEqual(new ValidationError('window must be less than or equal to 5.3'));
   });
 
-  it('should resolves validation when given a smaller value', async () => {
+  it('should resolves validation when given a less value', async () => {
     const schema = object({
       window: numeric().lte(5.3)
     });
@@ -288,6 +332,50 @@ describe('lte', () => {
     const result = schema.validate(value);
 
     expect(result).resolves.toEqual(value);
+  });
+
+  it('should reject validation when greater than ref', async () => {
+    const schema = object({
+      minWindow: numeric().lte(ref('maxWindow')),
+      maxWindow: numeric()
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.11' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('minWindow must be less than or equal to maxWindow'));
+  });
+
+  it('should reject validation when ref is invalid number', async () => {
+    const schema = object({
+      minWindow: numeric().lte(ref('maxWindow')),
+      maxWindow: numeric()
+    });
+    const value = { minWindow: '3.2', maxWindow: 'abc' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('maxWindow must be a `numeric` type, but the final value was: `"abc"`.'));
+  });
+
+  it('should resolves validation when less than ref', async () => {
+    const schema = object({
+      minWindow: numeric().lte(ref('maxWindow')),
+      maxWindow: numeric()
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.2000000001' };
+    const result = schema.validate(value);
+
+    await expect(result).resolves.toEqual(value);
+  });
+
+  it('should resolves validation when equal to ref', async () => {
+    const schema = object({
+      minWindow: numeric().lte(ref('maxWindow')),
+      maxWindow: numeric()
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.2' };
+    const result = schema.validate(value);
+
+    await expect(result).resolves.toEqual(value);
   });
 });
 
@@ -350,6 +438,50 @@ describe('eq', () => {
     const result = schema.validate(value);
 
     expect(result).resolves.toEqual(value);
+  });
+
+  it('should reject validation when greater than ref', async () => {
+    const schema = object({
+      minWindow: numeric().eq(ref('maxWindow')),
+      maxWindow: numeric()
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.3' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('minWindow must be equal to maxWindow'));
+  });
+
+  it('should reject validation when less than ref', async () => {
+    const schema = object({
+      minWindow: numeric().eq(ref('maxWindow')),
+      maxWindow: numeric()
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.11' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('minWindow must be equal to maxWindow'));
+  });
+
+  it('should reject validation when ref is invalid number', async () => {
+    const schema = object({
+      minWindow: numeric().eq(ref('maxWindow')),
+      maxWindow: numeric()
+    });
+    const value = { minWindow: '3.2', maxWindow: 'abc' };
+    const result = schema.validate(value);
+
+    await expect(result).rejects.toEqual(new ValidationError('maxWindow must be a `numeric` type, but the final value was: `"abc"`.'));
+  });
+
+  it('should resolves validation when equal to ref', async () => {
+    const schema = object({
+      minWindow: numeric().eq(ref('maxWindow')),
+      maxWindow: numeric()
+    });
+    const value = { minWindow: '3.2', maxWindow: '3.2' };
+    const result = schema.validate(value);
+
+    await expect(result).resolves.toEqual(value);
   });
 });
 
