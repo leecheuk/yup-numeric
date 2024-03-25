@@ -3,13 +3,13 @@ import { isAbsent, isEqual, isGreaterThan, isGreaterThanOrEqual, isInteger, isLe
 import BigNumber from "bignumber.js";
 
 export interface INumericSchema extends MixedSchema<string> {
-  gte: (num: number|string, message?: string) => INumericSchema;
-  lte: (num: number|string, message?: string) => INumericSchema;
-  eq: (num: number|string, message?: string) => INumericSchema;
+  gte: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
+  lte: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
+  eq: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
   gt: (num: number|string, message?: string) => INumericSchema;
   lt: (num: number|string, message?: string) => INumericSchema;
-  min: (num: number|string, message?: string) => INumericSchema;
-  max: (num: number|string, message?: string) => INumericSchema;
+  min: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
+  max: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
   integer: (message?: string) => INumericSchema;
   moreThan: (more: number|string|Reference<number|string>, message?: string) => INumericSchema;
   lessThan: (more: number|string|Reference<number|string>, message?: string) => INumericSchema;
@@ -33,23 +33,23 @@ export class NumericSchema extends MixedSchema<string> {
     });
   }
 
-  gte(num: number|string, message?: string): INumericSchema {
+  gte(num: number|string|Reference<number|string>, message?: string): INumericSchema {
     return isGreaterThanOrEqual.call(this, num, message);
   }
 
-  lte(num: number|string, message?: string): INumericSchema {
+  lte(num: number|string|Reference<number|string>, message?: string): INumericSchema {
     return isLessThanOrEqual.call(this, num, message);
   }
 
-  min(num: number|string, message?: string): INumericSchema {
+  min(num: number|string|Reference<number|string>, message?: string): INumericSchema {
     return isGreaterThanOrEqual.call(this, num, message);
   }
 
-  max(num: number|string, message?: string): INumericSchema {
+  max(num: number|string|Reference<number|string>, message?: string): INumericSchema {
     return isLessThanOrEqual.call(this, num, message);
   }
 
-  eq(num: number|string, message?: string): INumericSchema {
+  eq(num: number|string|Reference<number|string>, message?: string): INumericSchema {
     return isEqual.call(this, num, message);
   }
 
