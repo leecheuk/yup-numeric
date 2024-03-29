@@ -78,23 +78,23 @@ export class NumericSchema extends MixedSchema<string> {
   }
 
   required(msg?: Message<any>): INumericSchema {
-    return this.required(msg);
+    return super.required(msg) as INumericSchema;
   }
 
   notRequired(msg?: Message<any>): INumericSchema {
-    return this.required(msg);
+    return super.required(msg) as INumericSchema;
   }
 
   optional(): INumericSchema {
-    return this.optional();
+    return super.optional() as INumericSchema;
   }
 
   nonNullable(): INumericSchema {
-    return this.nonNullable();
+    return super.nonNullable() as INumericSchema;
   }
 
   nullable(msg?: Message<any> | undefined): INumericSchema {
-    return this.nullable(msg);
+    return super.nullable(msg) as INumericSchema;
   }
 }
 
