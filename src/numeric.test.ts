@@ -8,9 +8,9 @@ describe('numeric', () => {
   it('should resolve validation when given a valid value', async () => {
     const schema = numeric().typeError('Invalid numeric');
     const value = '1.0000000000000000000000000000000000001';
-    const result = await schema.validate(value);
+    const result = schema.validate(value);
 
-    expect(result).toBe(result);
+    await expect(result).toBe(result);
   });
 
   it('should reject validation when given an alphabet-only string', async () => {
@@ -18,7 +18,7 @@ describe('numeric', () => {
     const value = 'lol';
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given an alphanumeric string', async () => {
@@ -26,7 +26,7 @@ describe('numeric', () => {
     const value = '1.123lol.123';
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given a dot value', async () => {
@@ -34,7 +34,7 @@ describe('numeric', () => {
     const value = '.';
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given an empty string', async () => {
@@ -42,7 +42,7 @@ describe('numeric', () => {
     const value = '';
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given null', async () => {
@@ -50,7 +50,7 @@ describe('numeric', () => {
     const value = null;
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('this cannot be null'));
+    await expect(result).rejects.toEqual(new ValidationError('this cannot be null'));
   });
 
   it('should reject validation when given undefined', async () => {
@@ -58,7 +58,7 @@ describe('numeric', () => {
     const value = undefined;
     const result = await schema.validate(value);
 
-    expect(result).toBe(value);
+    await expect(result).toBe(value);
   });
 
 });
@@ -71,7 +71,7 @@ describe('gt', () => {
     const value = { window: '5.3' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be greater than 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be greater than 5.3'));
   });
 
   it('should reject validation when given a smaller value', async () => {
@@ -81,7 +81,7 @@ describe('gt', () => {
     const value = { window: '4' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be greater than 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be greater than 5.3'));
   });
 
   it('should reject validation when given an invalid value', async () => {
@@ -91,7 +91,7 @@ describe('gt', () => {
     const value = { window: 'sdfdf' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given null', async () => {
@@ -101,7 +101,7 @@ describe('gt', () => {
     const value = { window: null };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
+    await expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
   });
 
   it('should resolves when given undefined', async () => {
@@ -111,7 +111,7 @@ describe('gt', () => {
     const value = { window: undefined };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 });
 
@@ -123,7 +123,7 @@ describe('lt', () => {
     const value = { window: '5.3' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be less than 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be less than 5.3'));
   });
 
   it('should reject validation when given a greater value', async () => {
@@ -133,7 +133,7 @@ describe('lt', () => {
     const value = { window: '5.3000000000000001' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be less than 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be less than 5.3'));
   });
 
   it('should reject validation when given an invalid value', async () => {
@@ -143,7 +143,7 @@ describe('lt', () => {
     const value = { window: 'sdfdf' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given null', async () => {
@@ -153,7 +153,7 @@ describe('lt', () => {
     const value = { window: null };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
+    await expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
   });
 
   it('should resolves when given undefined', async () => {
@@ -163,7 +163,7 @@ describe('lt', () => {
     const value = { window: undefined };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 });
 
@@ -175,7 +175,7 @@ describe('gte', () => {
     const value = { window: '5.3' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should resolves validation when given a greater value', async () => {
@@ -185,7 +185,7 @@ describe('gte', () => {
     const value = { window: '5.3000000000000001' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should reject validation when given a smaller value', async () => {
@@ -195,7 +195,7 @@ describe('gte', () => {
     const value = { window: '5.2999999999999999999999' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be greater than or equal to 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be greater than or equal to 5.3'));
   });
 
   it('should reject validation when given an invalid value', async () => {
@@ -205,7 +205,7 @@ describe('gte', () => {
     const value = { window: 'sdfdf' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given null', async () => {
@@ -215,7 +215,7 @@ describe('gte', () => {
     const value = { window: null };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
+    await expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
   });
 
   it('should resolves when given undefined', async () => {
@@ -225,7 +225,7 @@ describe('gte', () => {
     const value = { window: undefined };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should reject validation when less than ref', async () => {
@@ -281,7 +281,7 @@ describe('lte', () => {
     const value = { window: '5.3' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should rejects validation when given a greater value', async () => {
@@ -291,7 +291,7 @@ describe('lte', () => {
     const value = { window: '5.3000000000000001' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be less than or equal to 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be less than or equal to 5.3'));
   });
 
   it('should resolves validation when given a less value', async () => {
@@ -301,7 +301,7 @@ describe('lte', () => {
     const value = { window: '5.2999999999999999999999' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should reject validation when given an invalid value', async () => {
@@ -311,7 +311,7 @@ describe('lte', () => {
     const value = { window: 'sdfdf' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given null', async () => {
@@ -321,7 +321,7 @@ describe('lte', () => {
     const value = { window: null };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
+    await expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
   });
 
   it('should resolves when given undefined', async () => {
@@ -331,7 +331,7 @@ describe('lte', () => {
     const value = { window: undefined };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should reject validation when greater than ref', async () => {
@@ -387,7 +387,7 @@ describe('eq', () => {
     const value = { window: '5.3' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should rejects validation when given a greater value', async () => {
@@ -397,7 +397,7 @@ describe('eq', () => {
     const value = { window: '5.3000000000000001' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be equal to 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be equal to 5.3'));
   });
 
   it('should rejects validation when given a smaller value', async () => {
@@ -407,7 +407,7 @@ describe('eq', () => {
     const value = { window: '5.2999999999999999999999' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be equal to 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be equal to 5.3'));
   });
 
   it('should reject validation when given an invalid value', async () => {
@@ -417,7 +417,7 @@ describe('eq', () => {
     const value = { window: 'sdfdf' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given null', async () => {
@@ -427,7 +427,7 @@ describe('eq', () => {
     const value = { window: null };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
+    await expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
   });
 
   it('should resolves when given undefined', async () => {
@@ -437,7 +437,7 @@ describe('eq', () => {
     const value = { window: undefined };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should reject validation when greater than ref', async () => {
@@ -493,7 +493,7 @@ describe('min', () => {
     const value = { window: '5.3' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should resolves validation when given a greater value', async () => {
@@ -503,7 +503,7 @@ describe('min', () => {
     const value = { window: '5.3000000000000001' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should reject validation when given a smaller value', async () => {
@@ -513,7 +513,7 @@ describe('min', () => {
     const value = { window: '5.2999999999999999999999' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be greater than or equal to 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be greater than or equal to 5.3'));
   });
 
   it('should reject validation when given an invalid value', async () => {
@@ -523,7 +523,7 @@ describe('min', () => {
     const value = { window: 'sdfdf' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given null', async () => {
@@ -533,7 +533,7 @@ describe('min', () => {
     const value = { window: null };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
+    await expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
   });
 
   it('should resolves when given undefined', async () => {
@@ -543,7 +543,7 @@ describe('min', () => {
     const value = { window: undefined };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 });
 
@@ -555,7 +555,7 @@ describe('max', () => {
     const value = { window: '5.3' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should rejects validation when given a greater value', async () => {
@@ -565,7 +565,7 @@ describe('max', () => {
     const value = { window: '5.3000000000000001' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be less than or equal to 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be less than or equal to 5.3'));
   });
 
   it('should resolves validation when given a smaller value', async () => {
@@ -575,7 +575,7 @@ describe('max', () => {
     const value = { window: '5.2999999999999999999999' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should reject validation when given an invalid value', async () => {
@@ -585,7 +585,7 @@ describe('max', () => {
     const value = { window: 'sdfdf' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError(invalidMessage));
+    await expect(result).rejects.toEqual(new ValidationError(invalidMessage));
   });
 
   it('should reject validation when given null', async () => {
@@ -595,7 +595,7 @@ describe('max', () => {
     const value = { window: null };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
+    await expect(result).rejects.toEqual(new ValidationError('window cannot be null'));
   });
 
   it('should resolves when given undefined', async () => {
@@ -605,7 +605,7 @@ describe('max', () => {
     const value = { window: undefined };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should rejects when given value is greater than max but smaller than lte', async () => {
@@ -615,7 +615,7 @@ describe('max', () => {
     const value = { window: '8' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be less than or equal to 5.3'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be less than or equal to 5.3'));
   });
 
   it('should rejects when given value is smaller than both max & lte', async () => {
@@ -625,7 +625,7 @@ describe('max', () => {
     const value = { window: '4' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 });
 
@@ -637,7 +637,7 @@ describe('integer', () => {
     const value = { window: '500390393093030330303030' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should resolve validation when given a negative integer', async () => {
@@ -647,7 +647,7 @@ describe('integer', () => {
     const value = { window: '-500390393093030330303030' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should resolve validation when given an integer with min boundary', async () => {
@@ -657,7 +657,7 @@ describe('integer', () => {
     const value = { window: '4.0' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should reject validation when given a non-integer', async () => {
@@ -667,7 +667,7 @@ describe('integer', () => {
     const value = { window: '5.3000000000000001' };
     const result = schema.validate(value);
 
-    expect(result).rejects.toEqual(new ValidationError('window must be an integer'));
+    await expect(result).rejects.toEqual(new ValidationError('window must be an integer'));
   });
 
   it('should resolve validation when given 0', async () => {
@@ -677,7 +677,7 @@ describe('integer', () => {
     const value = { window: '0' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 
   it('should resolve validation when given 0.00', async () => {
@@ -687,7 +687,7 @@ describe('integer', () => {
     const value = { window: '0.00' };
     const result = schema.validate(value);
 
-    expect(result).resolves.toEqual(value);
+    await expect(result).resolves.toEqual(value);
   });
 });
 
