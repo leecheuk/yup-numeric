@@ -1,18 +1,22 @@
-import { MixedSchema, Reference } from "yup";
+import { Message, MixedSchema, Reference } from "yup";
 import { isAbsent, isEqual, isGreaterThan, isGreaterThanOrEqual, isInteger, isLessThan, isLessThanOrEqual, isLessThanWithRef, isMoreThanWithRef } from "./utils";
 import BigNumber from "bignumber.js";
 
 export interface INumericSchema extends MixedSchema<string> {
-  gte: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
-  lte: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
-  eq: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
-  gt: (num: number|string, message?: string) => INumericSchema;
-  lt: (num: number|string, message?: string) => INumericSchema;
-  min: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
-  max: (num: number|string|Reference<number|string>, message?: string) => INumericSchema;
-  integer: (message?: string) => INumericSchema;
-  moreThan: (more: number|string|Reference<number|string>, message?: string) => INumericSchema;
-  lessThan: (more: number|string|Reference<number|string>, message?: string) => INumericSchema;
+  gte: (num: number|string|Reference<number|string>, message?: Message<any>) => INumericSchema;
+  lte: (num: number|string|Reference<number|string>, message?: Message<any>) => INumericSchema;
+  eq: (num: number|string|Reference<number|string>, message?: Message<any>) => INumericSchema;
+  gt: (num: number|string, message?: Message<any>) => INumericSchema;
+  lt: (num: number|string, message?: Message<any>) => INumericSchema;
+  min: (num: number|string|Reference<number|string>, message?: Message<any>) => INumericSchema;
+  max: (num: number|string|Reference<number|string>, message?: Message<any>) => INumericSchema;
+  integer: (message?: Message<any>) => INumericSchema;
+  moreThan: (more: number|string|Reference<number|string>, message?: Message<any>) => INumericSchema;
+  lessThan: (more: number|string|Reference<number|string>, message?: Message<any>) => INumericSchema;
+  required: (message?: Message<any>) => INumericSchema;
+  optional: () => INumericSchema;
+  nullable: (message?: Message<any>) => INumericSchema;
+  nonNullable: () => INumericSchema;
 }
 
 export class NumericSchema extends MixedSchema<string> {
@@ -33,44 +37,64 @@ export class NumericSchema extends MixedSchema<string> {
     });
   }
 
-  gte(num: number|string|Reference<number|string>, message?: string): INumericSchema {
+  gte(num: number|string|Reference<number|string>, message?: Message<any>): INumericSchema {
     return isGreaterThanOrEqual.call(this, num, message);
   }
 
-  lte(num: number|string|Reference<number|string>, message?: string): INumericSchema {
+  lte(num: number|string|Reference<number|string>, message?: Message<any>): INumericSchema {
     return isLessThanOrEqual.call(this, num, message);
   }
 
-  min(num: number|string|Reference<number|string>, message?: string): INumericSchema {
+  min(num: number|string|Reference<number|string>, message?: Message<any>): INumericSchema {
     return isGreaterThanOrEqual.call(this, num, message);
   }
 
-  max(num: number|string|Reference<number|string>, message?: string): INumericSchema {
+  max(num: number|string|Reference<number|string>, message?: Message<any>): INumericSchema {
     return isLessThanOrEqual.call(this, num, message);
   }
 
-  eq(num: number|string|Reference<number|string>, message?: string): INumericSchema {
+  eq(num: number|string|Reference<number|string>, message?: Message<any>): INumericSchema {
     return isEqual.call(this, num, message);
   }
 
-  gt(num: number|string, message?: string): INumericSchema {
+  gt(num: number|string, message?: Message<any>): INumericSchema {
     return isGreaterThan.call(this, num, message);
   }
 
-  lt(num: number|string, message?: string): INumericSchema {
+  lt(num: number|string, message?: Message<any>): INumericSchema {
     return isLessThan.call(this, num, message);
   }
 
-  integer(message?: string): INumericSchema {
+  integer(message?: Message<any>): INumericSchema {
     return isInteger.call(this, message);
   }
 
-  moreThan(more: number|string|Reference<number|string>, message?: string): INumericSchema {
+  moreThan(more: number|string|Reference<number|string>, message?: Message<any>): INumericSchema {
     return isMoreThanWithRef.call(this, more, message);
   }
 
-  lessThan(less: number|string|Reference<number|string>, message?: string): INumericSchema {
+  lessThan(less: number|string|Reference<number|string>, message?: Message<any>): INumericSchema {
     return isLessThanWithRef.call(this, less, message);
+  }
+
+  required(msg?: Message<any>): INumericSchema {
+    return super.required(msg) as INumericSchema;
+  }
+
+  notRequired(msg?: Message<any>): INumericSchema {
+    return super.required(msg) as INumericSchema;
+  }
+
+  optional(): INumericSchema {
+    return super.optional() as INumericSchema;
+  }
+
+  nonNullable(): INumericSchema {
+    return super.nonNullable() as INumericSchema;
+  }
+
+  nullable(msg?: Message<any> | undefined): INumericSchema {
+    return super.nullable(msg) as INumericSchema;
   }
 }
 

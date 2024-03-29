@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { INumericSchema } from './numeric';
-import { Reference } from 'yup';
+import { Message, Reference } from 'yup';
 
 export const isAbsent = (value: any): boolean => value == null;
 
@@ -11,7 +11,7 @@ const getPath = (value: number|string|Reference<number|string>): string => !isPr
   ? (value as Reference<number|string>).path
   : value;
 
-export function isGreaterThanOrEqual(this: INumericSchema, num: number|string|Reference<number|string>, message?: string): INumericSchema {
+export function isGreaterThanOrEqual(this: INumericSchema, num: number|string|Reference<number|string>, message?: Message<any>): INumericSchema {
   const primitive = isPrimitive(num);
   const path = getPath(num);
 
@@ -32,7 +32,7 @@ export function isGreaterThanOrEqual(this: INumericSchema, num: number|string|Re
   });
 }
 
-export function isLessThanOrEqual(this: INumericSchema, num: number|string|Reference<number|string>, message?: string) {
+export function isLessThanOrEqual(this: INumericSchema, num: number|string|Reference<number|string>, message?: Message<any>) {
   const primitive = isPrimitive(num);
   const path = getPath(num);
 
@@ -54,7 +54,7 @@ export function isLessThanOrEqual(this: INumericSchema, num: number|string|Refer
 }
 
 
-export function isEqual(this: INumericSchema, num: number|string|Reference<number|string>, message?: string) {
+export function isEqual(this: INumericSchema, num: number|string|Reference<number|string>, message?: Message<any>) {
   const primitive = isPrimitive(num);
   const path = getPath(num);
 
@@ -76,7 +76,7 @@ export function isEqual(this: INumericSchema, num: number|string|Reference<numbe
 }
 
 
-export function isGreaterThan(this: INumericSchema, num: number|string, message?: string) {
+export function isGreaterThan(this: INumericSchema, num: number|string, message?: Message<any>) {
   const defaultMessage = `\${path} must be greater than ${num}`;
   return this.test('gt', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
@@ -86,7 +86,7 @@ export function isGreaterThan(this: INumericSchema, num: number|string, message?
 }
 
 
-export function isLessThan(this: INumericSchema, num: number|string, message?: string) {
+export function isLessThan(this: INumericSchema, num: number|string, message?: Message<any>) {
   const defaultMessage = `\${path} must be less than ${num}`;
   return this.test('lt', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
@@ -95,7 +95,7 @@ export function isLessThan(this: INumericSchema, num: number|string, message?: s
   });
 }
 
-export const isNumeric = function(this: INumericSchema, message?: string) {
+export const isNumeric = function(this: INumericSchema, message?: Message<any>) {
   const defaultMessage = `\${path} must a valid number`;
   return this.test('numeric', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
@@ -104,7 +104,7 @@ export const isNumeric = function(this: INumericSchema, message?: string) {
   });
 }
 
-export const isInteger = function(this: INumericSchema, message?: string) {
+export const isInteger = function(this: INumericSchema, message?: Message<any>) {
   const defaultMessage = `\${path} must be an integer`;
   return this.test('integer', message ?? defaultMessage, function(value: string) {
     if (isAbsent(value)) return true;
@@ -113,7 +113,7 @@ export const isInteger = function(this: INumericSchema, message?: string) {
   });
 }
 
-export const isMoreThanWithRef = function(this: INumericSchema, more: number|string|Reference<number|string>, message?: string) {
+export const isMoreThanWithRef = function(this: INumericSchema, more: number|string|Reference<number|string>, message?: Message<any>) {
   const primitive = isPrimitive(more);
   const morePath = getPath(more);
 
@@ -134,7 +134,7 @@ export const isMoreThanWithRef = function(this: INumericSchema, more: number|str
   });
 }
 
-export const isLessThanWithRef = function(this: INumericSchema, less: number|string|Reference<number|string>, message?: string) {
+export const isLessThanWithRef = function(this: INumericSchema, less: number|string|Reference<number|string>, message?: Message<any>) {
   const primitive = isPrimitive(less);
   const lessPath = getPath(less);
 
