@@ -1,4 +1,4 @@
-import { MixedSchema, Reference } from "yup";
+import { Message, MixedSchema, Reference } from "yup";
 import { isAbsent, isEqual, isGreaterThan, isGreaterThanOrEqual, isInteger, isLessThan, isLessThanOrEqual, isLessThanWithRef, isMoreThanWithRef } from "./utils";
 import BigNumber from "bignumber.js";
 
@@ -13,6 +13,10 @@ export interface INumericSchema extends MixedSchema<string> {
   integer: (message?: string) => INumericSchema;
   moreThan: (more: number|string|Reference<number|string>, message?: string) => INumericSchema;
   lessThan: (more: number|string|Reference<number|string>, message?: string) => INumericSchema;
+  required: (message?: string) => INumericSchema;
+  optional: () => INumericSchema;
+  nullable: (message?: string) => INumericSchema;
+  nonNullable: () => INumericSchema;
 }
 
 export class NumericSchema extends MixedSchema<string> {
@@ -71,6 +75,26 @@ export class NumericSchema extends MixedSchema<string> {
 
   lessThan(less: number|string|Reference<number|string>, message?: string): INumericSchema {
     return isLessThanWithRef.call(this, less, message);
+  }
+
+  required(msg?: Message<any> | undefined): INumericSchema {
+    return this.required(msg);
+  }
+
+  notRequired(msg?: Message<any> | undefined): INumericSchema {
+    return this.required(msg);
+  }
+
+  optional(): INumericSchema {
+    return this.optional();
+  }
+
+  nonNullable(): INumericSchema {
+    return this.nonNullable();
+  }
+
+  nullable(msg?: Message<any> | undefined): INumericSchema {
+    return this.nullable(msg);
   }
 }
 
