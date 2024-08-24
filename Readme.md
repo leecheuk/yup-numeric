@@ -28,6 +28,9 @@ Value must be less than or equal to `num`.
 ### `numeric().eq(num: number|string|Ref, message?: string)`
 Value must be equal to `num`.
 
+### `numeric().neq(num: number|string|Ref, message?: string)`
+Value must not be equal to `num`.
+
 ### `numeric().gt(num: number|string, message?: string)`
 Value must be greater than `num`.
 
