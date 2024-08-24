@@ -9,6 +9,7 @@ import {
   isLessThanOrEqual,
   isLessThanWithRef,
   isMoreThanWithRef,
+  isNotEqual,
 } from "./utils";
 import BigNumber from "bignumber.js";
 
@@ -22,6 +23,10 @@ export interface INumericSchema extends MixedSchema<string> {
     message?: Message<any>
   ) => INumericSchema;
   eq: (
+    num: number | string | Reference<number | string>,
+    message?: Message<any>
+  ) => INumericSchema;
+  neq: (
     num: number | string | Reference<number | string>,
     message?: Message<any>
   ) => INumericSchema;
@@ -126,6 +131,18 @@ export class NumericSchema extends MixedSchema<string> {
     message?: Message<any>
   ): INumericSchema {
     return isEqual.call(this, num, message);
+  }
+
+  /**
+   * Value must not be equal to the given number `num` (ie. value !== num),
+   * where `num` can be a string, number or reference to another field.
+   * For instance, `ref('field_name')`.
+   */
+  neq(
+    num: number | string | Reference<number | string>,
+    message?: Message<any>
+  ): INumericSchema {
+    return isNotEqual.call(this, num, message);
   }
 
   /**
